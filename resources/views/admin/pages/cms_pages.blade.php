@@ -36,7 +36,9 @@
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">CMS Pages</h3>
+                  @if ($cmsPagemodule['edit_access']== 1 || $cmsPagemodule['full_access']== 1)
                   <a href="{{ url('admin/add-edit-cmspage') }}" style="width: 150px; float:right; display:inline-block" class="btn btn-block btn-primary">Add CMS Page</a>
+                  @endif
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">

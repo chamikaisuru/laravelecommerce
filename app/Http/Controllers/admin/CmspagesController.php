@@ -19,6 +19,7 @@ class CmspagesController extends Controller
         Session::put('page','cms-pages');
         $cmspages = CmsPage::get()->toArray();
     //    dd($cmspages);
+        // set admin/subadmin permission for cms pages
 
         $cmspagemoduleCount = admins_Roles::where([
             'subadmin_id'=>Auth::guard('admin')->user()->id,
@@ -26,15 +27,15 @@ class CmspagesController extends Controller
             ])->count();
         $cmsPagemodule = array();
 
-        if(Auth::guard('admin')->user()->type){
+        if(Auth::guard('admin')->user()->type=="admin"){
             $cmsPagemodule['view_access']= 1;
             $cmsPagemodule['edit_access']= 1;
             $cmsPagemodule['full_access']= 1;
         } else if($cmspagemoduleCount == 0){
             $message = "This feature is Restricted for you!";
-            return redirect('admin.pages.dashboard')->with('error_message',$message);
+            return redirect('admin/dashboard')->with('error_message',$message);
         }else{
-            $cmsPagemodule=$cmspagemoduleCount = admins_Roles::where(['subadmin_id'=>Auth::guard('admin')->user()->id, 'module'=>'cms_pages'])->first()->toArray();
+            $cmsPagemodule = admins_Roles::where(['subadmin_id'=>Auth::guard('admin')->user()->id, 'module'=>'cms_pages'])->first()->toArray();
         }
 
        return view('admin.pages.cms_pages')->with(compact('cmspages','cmsPagemodule'));
