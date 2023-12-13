@@ -63,6 +63,8 @@
                     $active = "";
                 @endphp
             @endif
+
+            @if(Auth::guard('admin')->user()->type=="admin")
                <li class="nav-item menu-open">
             <a href="#" class="nav-link {{ $active }}">
               <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -120,6 +122,9 @@
             </a>
 
           </li>
+          @endif
+
+
 
           <li class="nav-item">
             @if (Session::get('page') =='cms-pages')
