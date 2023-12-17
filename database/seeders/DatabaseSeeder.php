@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         //$this->call(AdminsTableSeeder::class);
-        $this->call(SubAdminSeeder::class);
+        $this->call(categoriesTableSeeder::class);
+        //$this->call(SubAdminSeeder::class);
         //$this->call(cmspagetableseeder::class);
     }
 }
