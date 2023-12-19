@@ -38,19 +38,18 @@ class categoryController extends Controller
      /**
      * Remove the specified resource from storage.
      */
-    public function delete($id)
+    public function deleteCategory($id)
     {
-        Category::where('id',$id)->deleteCategory();
+        Category::where('id',$id)->delete();
         return redirect()->back()->with('success_message','Category Deleted Successfully!');
     }
 
     public function addEditCategory(Request $request, $id = null){
-       //dd($request);
         Session::put('page','add-edit-category');
         if($id == ""){
             $title = "Add Category";
             $category = new Category();
-            $message = "CMS Page Add Successfully!";
+            $message = "Category Add Successfully!";
         } else {
             $title = "Edit Category";
             $category =Category::find($id);
@@ -59,7 +58,7 @@ class categoryController extends Controller
 
         if($request->isMethod('post')){
             $data = $request->all();
-
+            //dd( $data);
             $rules = [
                         'category_name' => 'required',
                         'description' => 'required',
@@ -81,20 +80,22 @@ class categoryController extends Controller
                     $extension = $imageTmp->getClientOriginalExtension();
                     // Generate New Image name
                     $imageName = rand(111,99999).'.'.$extension;
-                    $imagePath = 'admin/img/category/'.$imageName;
-
-                   // Image::make($imageTmp)->save($imagePath);
+                    $imagePath = 'frontend/img/category/'.$imageName;
+                    // upload image to database
                    Image::make($imageTmp)->save($imagePath);
 
-                } elseif (!empty($data['current_img'])){
-                        $imageName = $data['current_img'];
-                    }
-                else {
-                    $imageName = '';
                 }
             }
+            elseif (!empty($data['current_img'])){
+                $imageName = $data['current_img'];
+                //dd($imageName);
+            }
+        else {
+            $imageName = '';
+        }
 
                     $category->category_name = $data['category_name'];
+                    $category->category_image = $imageName;
                     $category->category_discount = $data['category_discount'];
                     $category->description = $data['description'];
                     $category->url = $data['url'];

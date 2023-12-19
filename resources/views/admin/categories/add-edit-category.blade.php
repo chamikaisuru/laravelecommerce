@@ -55,7 +55,7 @@
                     <label for="image">Category Image</label>
                     <input type="file" class="form-control" name="category_image" id="category_image" placeholder="Choose Category Image">
                     @if (!empty($category['category_image']))
-                    <a target="_blank" href="{{ url('admin/img/category/'.$category['category_image'])}}">View Photo</a>
+                    <a target="_blank" href="{{ url('frontend/img/category/'.$category['category_image'])}}">View Photo</a>
                     <input type="hidden" name="current_img" id="current_img" value="{{ $category['category_image'] }}">
                     @endif
                 </div>
