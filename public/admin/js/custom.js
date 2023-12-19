@@ -51,6 +51,33 @@ $("#current_pwd").keyup(function(){
         });
      });
 
+      // Update category Status
+      $(document).on('click','.updateCategoryStatus', function(){
+        var status = $(this).children('i').attr('status');
+        var category_id = $(this).attr('category_id');
+       //alert(status);
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type:'post',
+            url:'/admin/update-categoery-status',
+            data:{status:status,category_id:category_id},
+            success:function(res){
+
+                if(res['status'] == 0){
+                    $('#category-'+category_id).html('<i class="fas fa-toggle-off" status="Inactive" style="color: gray"></i>');
+                }else if(res['status'] == 1){
+                    $('#category-'+category_id).html('<i class="fas fa-toggle-on" status="Active"></i>');
+                }
+
+            },
+            error:function(){
+                alert("Error");
+            }
+        });
+     });
+
 // Delete Confirmation CMS-page
 // $(document).on('click','.confirmDelete' , function(){
 

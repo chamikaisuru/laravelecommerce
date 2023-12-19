@@ -100,6 +100,7 @@
     $(function () {
       $("#cms_page").DataTable();
       $("#subadmintbl").DataTable();
+      $("#Categories").DataTable();
     });
   </script>
 

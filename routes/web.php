@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\CmspagesController;
+use App\Http\Controllers\categoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,6 +46,17 @@ Route::group(['prefix' => 'admin'],function () {
 
         //admins Role Routers
         Route::match (['get','post'],'update-role/{id}',[AdminController::class, 'updateAdminsRoles'])->name('admin.updateAdminsRoles');
+
+        //categories
+        Route::get('categories',[categoryController::class,'categories'])->name('admin.categories');
+        Route::post('update-categoery-status',[categoryController::class,'updateCategoeryStatus'])->name('admin.updateCategoeryStatus');
+        Route::get('delete-category/{id?}',[categoryController::class,'deleteCategory'])->name('admin.delete-category');
+        Route::match(['get','post'],'add-edit-category/{id?}',[categoryController::class, 'addEditCategory'])->name('admin.add-edit-category');
+
+
+        //prodcts
+        Route::match(['get','post'],'product', [categoryController::class,'product'])->name('admin.product');
+
 
     });
 });
