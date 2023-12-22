@@ -56,8 +56,7 @@
                 @csrf
                 <input type="hidden" name="subadmin_id" value="{{ $id }}">
                 <div class="card-body ">
-
-                      @if (!empty($subadminRole))
+                       @if (!empty($subadminRole))
                             @foreach ($subadminRole as $role)
                                 @if ($role['module'] =="cms_pages")
                                     @if ($role['view_access'] == 1)
@@ -97,7 +96,7 @@
                             @endforeach
                       @endif
 
-                      {{-- @if (!empty($subadminRole))
+                          @if (!empty($subadminRole))
                             @foreach ($subadminRole as $role)
                                 @if ($role['module'] =="categories")
                                     @if ($role['view_access'] == 1)
@@ -118,7 +117,7 @@
                                 @endif
 
                             @endforeach
-                      @endif --}}
+                      @endif
                       <div class="form-group col-md-6">
                      <label for="cms_pages">CMS Pages:&nbsp;&nbsp;&nbsp;</label>
                      <input type="checkbox" name="cms_pages[view]" value="1" @if (@isset($viewcmspage)) {{ $viewcmspage }} @endif>&nbsp;&nbsp;View Access&nbsp;&nbsp;&nbsp;

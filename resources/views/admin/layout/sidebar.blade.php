@@ -204,7 +204,7 @@
               $active = "";
           @endphp
         @endif
-           @if(Auth::guard('admin')->user()->type=="admin")
+
            <li class="nav-item menu-open">
            <a href="#" class="nav-link {{ $active }}">
              <i class="nav-icon fas fa-th"></i>
@@ -246,7 +246,7 @@
               </li>
            </ul>
          </li>
-         @endif
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

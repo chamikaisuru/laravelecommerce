@@ -261,55 +261,39 @@ class AdminController extends Controller
 
     }
 
-    public function updateAdminsRoles(Request $request,$id){
-        //dd($id);
-
-        if($request->isMethod('post')){
+    public function updateAdminsRoles(Request $request, $id) {
+        if ($request->isMethod('post')) {
             $data = $request->all();
-            //dd($data);
+           // dd($data);
 
-            // Delete all earliar Roles for subadmin
-            admins_Roles::where('subadmin_id',$id)->delete();
+            // Delete all earlier Roles for subadmin
+            admins_Roles::where('subadmin_id', $id)->delete();
 
-            // Add Roles for subadmin
-            foreach($data as $key => $value){
-                if(isset($value['view'])){
-                    $view = $value['view'];
-                } else{
-                    $view =0;
-                }
-                if(isset($value['edit'])){
-                    $edit = $value['edit'];
-                } else{
-                    $edit =0;
-                }
-                if(isset($value['full'])){
-                    $full = $value['full'];
-                } else{
-                    $full =0;
-                }
+            // update Admins roles/Permission
+            foreach (['cms_pages', 'categories'] as $module) {
+                admins_Roles::updateOrCreate(
+                    [
+                        'subadmin_id' => $data['subadmin_id'],
+                        'module' => $module,
+                    ],
+                    [
+                        'view_access' => isset($data[$module]['view']) ? $data[$module]['view'] : 0,
+                        'edit_access' => isset($data[$module]['edit']) ? $data[$module]['edit'] : 0,
+                        'full_access' => isset($data[$module]['full']) ? $data[$module]['full'] : 0,
+                    ]
+                );
             }
 
-            $role = new admins_Roles();
-
-            $role->subadmin_id = $id;
-            $role->module = $key;
-            $role->view_access = $view;
-            $role->edit_access = $edit;
-            $role->full_access = $full;
-            $role->save();
-
             $message = "Subadmin Role Add Successfully";
-            return redirect()->back()->with('success_message',$message);
+            return redirect()->back()->with('success_message', $message);
         }
 
-        $subadminRole = admins_Roles::where('subadmin_id',$id)->get()->toArray();
-        $subadminDetails = Admin::where('id',$id)->first()->toArray();
-       //dd($subadminDetails);
-       $title = "Update ".$subadminDetails['name']."'s sub Admin Roles/Permission";
-      // dd($title);
+        $subadminRole = admins_Roles::where('subadmin_id', $id)->get()->toArray();
+        $subadminDetails = Admin::where('id', $id)->first()->toArray();
+        $title = "Update " . $subadminDetails['name'] . "'s sub Admin Roles/Permission";
 
-
-        return view('admin.subadmin.updateAdminsRoles')->with(compact('title','id','subadminRole'));
+        return view('admin.subadmin.updateAdminsRoles')->with(compact('title', 'id', 'subadminRole'));
     }
+
+
 }

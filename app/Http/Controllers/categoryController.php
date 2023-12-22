@@ -24,7 +24,7 @@ class categoryController extends Controller
        // set admin/subadmin permission for categories
        $categoriesmoduleCount = admins_Roles::where([
         'subadmin_id'=>Auth::guard('admin')->user()->id,
-        'module'=>'categories'
+        'module'=>'categories','view_access'=> 0,'edit_access'=> 0, 'full_access' => 0
         ])->count();
         $categoriesmodule = array();
 
@@ -32,7 +32,7 @@ class categoryController extends Controller
             $categoriesmodule['view_access']= 1;
             $categoriesmodule['edit_access']= 1;
             $categoriesmodule['full_access']= 1;
-        } else if($categoriesmoduleCount == 0){
+        } else if($categoriesmoduleCount == 1){
             $message = "This feature is Restricted for you!";
             return redirect('admin/dashboard')->with('error_message',$message);
         }else{

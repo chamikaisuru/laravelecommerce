@@ -22,16 +22,17 @@ class CmspagesController extends Controller
 
         // set admin/subadmin permission for cms pages
         $cmspagemoduleCount = admins_Roles::where([
-            'subadmin_id'=>Auth::guard('admin')->user()->id,
-            'module'=>'cms_pages'
+            'subadmin_id'=> Auth::guard('admin')->user()->id,
+            'module'=>'cms_pages','view_access'=> 0,'edit_access'=> 0, 'full_access' => 0
             ])->count();
+            //dd($cmspagemoduleCount);
         $cmsPagemodule = array();
 
         if(Auth::guard('admin')->user()->type=="admin"){
             $cmsPagemodule['view_access']= 1;
             $cmsPagemodule['edit_access']= 1;
             $cmsPagemodule['full_access']= 1;
-        } else if($cmspagemoduleCount == 0){
+        } else if($cmspagemoduleCount == 1){
             $message = "This feature is Restricted for you!";
             return redirect('admin/dashboard')->with('error_message',$message);
         }else{
