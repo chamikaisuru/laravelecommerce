@@ -128,13 +128,13 @@ class AdminController extends Controller
                    // Image::make($imageTmp)->save($imagePath);
                    Image::make($imageTmp)->save($imagePath);
 
-                } elseif (!empty($data['current_img'])){
-                        $imageName = $data['current_img'];
-                    }
-                else {
-                    $imageName = '';
                 }
+            } elseif (!empty($data['current_img'])){
+                $imageName = $data['current_img'];
             }
+        else {
+            $imageName = '';
+        }
 
             //update Admin Details
             Admin::where('email',Auth::guard('admin')->user()->email)->update(['name' => $data['name'],'mobile' => $data['mobile'],'image' => $imageName]);

@@ -36,9 +36,9 @@
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Categories</h3>
-
+                  @if ($categoriesmodule['edit_access']== 1 || $categoriesmodule['full_access']== 1)
                   <a href="{{ url('admin/add-edit-category') }}" style="width: 150px; float:right; display:inline-block" class="btn btn-block btn-primary">Add Categories</a>
-
+                  @endif
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -66,21 +66,21 @@
                             <td>{{ $category['url'] }}</td>
                             <td>{{ date("F j, Y, g:i a", strtotime($category['created_at']))}}</td>
                             <td>
-                                {{-- @if ($cmsPagemodule['edit_access']== 1 || $cmsPagemodule['full_access']== 1) --}}
+                                @if ($categoriesmodule['edit_access']== 1 || $categoriesmodule['full_access']== 1)
                                 @if ($category['status'] == 1)
                                 <a class="updateCategoryStatus" id="category-{{ $category['id'] }}" category_id="{{ $category['id'] }}" href="javascript:void(0)"><i class="fas fa-toggle-on" status="Active"></i></a>
                                 @else
                                 <a class="updateCategoryStatus" id="category-{{ $category['id'] }}" category_id="{{ $category['id'] }}" href="javascript:void(0)"><i class="fas fa-toggle-off" status="Inactive" style="color: gray"></i></a>
                                 @endif
-                                {{-- @endif --}}
+                                @endif
                                 &nbsp;&nbsp;
-                                {{-- @if ($cmsPagemodule['edit_access']== 1 || $cmsPagemodule['full_access']== 1) --}}
+                                @if ($categoriesmodule['edit_access']== 1 || $categoriesmodule['full_access']== 1)
                                 <a class="editcategory" href="{{ url('admin/add-edit-category/'.$category['id']) }}" ><i class="fas fa-edit" aria-hidden="true"></i></a>
-                                {{-- @endif --}}
+                                @endif
                                 &nbsp;&nbsp;
-                                {{-- @if ($cmsPagemodule['full_access']== 1) --}}
+                                @if ($categoriesmodule['full_access']== 1)
                                 <a class="confirmDelete" title="Delete Category" href="javascript:void(0)" record="category" recordid="{{ $category['id'] }}"  {{--href="{{ url('admin/delete-cmspage/'.$page['id']) }}" --}}><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                {{-- @endif --}}
+                                @endif
                             </td>
                           </tr>
                         @endforeach

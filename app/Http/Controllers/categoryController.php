@@ -1,11 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\admins_Roles;
 use App\Models\Category;
 use Illuminate\Support\Facades\Session;
 use Intervention\Image\Facades\Image;
 
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+use function PHPUnit\Framework\fileExists;
 
 class categoryController extends Controller
 {
@@ -14,7 +20,26 @@ class categoryController extends Controller
         Session::put('page','categories');
         $categories = Category::with('parentcategory')->get();
        // dd($categories);
-        return view('admin.categories.category')->with(compact('categories'));
+
+       // set admin/subadmin permission for categories
+       $categoriesmoduleCount = admins_Roles::where([
+        'subadmin_id'=>Auth::guard('admin')->user()->id,
+        'module'=>'categories'
+        ])->count();
+        $categoriesmodule = array();
+
+        if(Auth::guard('admin')->user()->type=="admin"){
+            $categoriesmodule['view_access']= 1;
+            $categoriesmodule['edit_access']= 1;
+            $categoriesmodule['full_access']= 1;
+        } else if($categoriesmoduleCount == 0){
+            $message = "This feature is Restricted for you!";
+            return redirect('admin/dashboard')->with('error_message',$message);
+        }else{
+            $categoriesmodule = admins_Roles::where(['subadmin_id'=>Auth::guard('admin')->user()->id, 'module'=>'categories'])->first()->toArray();
+        }
+
+        return view('admin.categories.category')->with(compact('categories','categoriesmodule'));
     }
 
     public function updateCategoeryStatus(Request $request) {
@@ -44,7 +69,25 @@ class categoryController extends Controller
         return redirect()->back()->with('success_message','Category Deleted Successfully!');
     }
 
-    public function addEditCategory(Request $request, $id = null){
+    public function deleteCategoryimage($id) {
+
+        // Get image name
+        $categoryImage = Category::select('category_image')->where('id',$id)->first();
+
+        //Get image path
+        $category_image_path = 'frontend/img/category/';
+        //Check if image exists in directory and delete image from path
+        if(fileExists($category_image_path.$categoryImage->category_image)){
+            unlink($category_image_path.$categoryImage->category_image);
+        }
+        //Delete image from database
+        Category::where('id',$id)->update(['category_image'=>'']);
+
+        return redirect()->back()->with('success_message','Category-image Deleted Successfully!');
+    }
+
+    public function addEditCategory(Request $request, $id = null) {
+        $getCategories = Category::getCategories();
         Session::put('page','add-edit-category');
         if($id == ""){
             $title = "Add Category";
@@ -53,22 +96,40 @@ class categoryController extends Controller
         } else {
             $title = "Edit Category";
             $category =Category::find($id);
+            //dd($category);
             $message = "Category Updated Successfully!";
         }
 
         if($request->isMethod('post')){
             $data = $request->all();
             //dd( $data);
-            $rules = [
-                        'category_name' => 'required',
-                        'description' => 'required',
-                        'url' => 'required',
-                    ];
+
+            if($id ==""){
+                $rules = [
+                    'parent_id'=>'required',
+                    'category_name' => 'required',
+                    'image' => 'image',
+                    'description' => 'required',
+                    'url' => 'required|unique:categories',
+                ];
+            } else {
+                $rules = [
+                    'parent_id'=>'required',
+                    'category_name' => 'required',
+                    'image' => 'image',
+                    'description' => 'required',
+                    'url' => 'required',
+                ];
+            }
+
 
             $customMessage = [
+                                'parent_id' => 'Category Level is required',
                                 'category_name.required' => 'category name is required',
+                                'image.image' => 'Valid image is required',
                                 'description.required' => 'category Description is required',
                                 'url.required' => 'category URL is required',
+                                'url.unique' => 'unique category URL is required',
                             ];
 
             $this->validate($request,$rules,$customMessage);
@@ -94,6 +155,11 @@ class categoryController extends Controller
             $imageName = '';
         }
 
+        if(empty(isset($data['category_discount']))){
+            $data['category_discount']=0;
+        }
+
+                    $category->parent_id = $data['parent_id'];
                     $category->category_name = $data['category_name'];
                     $category->category_image = $imageName;
                     $category->category_discount = $data['category_discount'];
@@ -109,7 +175,7 @@ class categoryController extends Controller
                     return redirect('admin/categories')->with('success_message',$message);
         }
 
-        return view('admin.categories.add-edit-category')->with(compact('title','category'));
+        return view('admin.categories.add-edit-category')->with(compact('title','category','getCategories'));
 
     }
 

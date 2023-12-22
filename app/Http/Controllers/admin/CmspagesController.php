@@ -18,9 +18,9 @@ class CmspagesController extends Controller
     {
         Session::put('page','cms-pages');
         $cmspages = CmsPage::get()->toArray();
-    //    dd($cmspages);
-        // set admin/subadmin permission for cms pages
+        //dd($cmspages);
 
+        // set admin/subadmin permission for cms pages
         $cmspagemoduleCount = admins_Roles::where([
             'subadmin_id'=>Auth::guard('admin')->user()->id,
             'module'=>'cms_pages'

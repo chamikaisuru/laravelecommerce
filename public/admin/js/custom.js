@@ -93,6 +93,7 @@ $("#current_pwd").keyup(function(){
 //Delete Confirmation using Sweet alert
 
 $(document).on('click', '.confirmDelete', function () {
+
     var record = $(this).attr('record');
     var recordID = $(this).attr('recordid');
 
@@ -113,7 +114,7 @@ $(document).on('click', '.confirmDelete', function () {
             icon:"success"
       })
         // Redirect to the delete URL
-        window.location.href = "delete-"+record+"/"+recordID;
+        window.location.href = "/admin/delete-"+record+"/"+recordID;
 
       }
     });

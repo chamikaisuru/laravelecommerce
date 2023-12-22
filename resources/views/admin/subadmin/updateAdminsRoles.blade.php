@@ -56,39 +56,81 @@
                 @csrf
                 <input type="hidden" name="subadmin_id" value="{{ $id }}">
                 <div class="card-body ">
-                    {{-- <div class="form-group col-md-6">
-                        <label for="email">Email*</label>
-                        <input type="email" @if ($subadminData['email'] != "") disabled style="background-color:#666 " @else required @endif class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Email" @if (!empty($subadminData['email'])) value="{{ $subadminData['email'] }}" @endif>
-                      </div>
-                      @error('email')
-                      <div class="alert alert-danger">{{ $message }}</div>
-                      @enderror --}}
+
                       @if (!empty($subadminRole))
-                      @foreach ($subadminRole as $role)
-                          @if ($role['module'] =="cms_pages")
-                              @if ($role['view_access'] == 1)
-                                  @php $viewcmspage="checked"; @endphp
-                                  @else
-                                  @php $viewcmspage=""; @endphp
-                              @endif
-                              @if ($role['edit_access'] == 1)
-                                  @php $editcmspage="checked"; @endphp
-                                  @else
-                                  @php $editcmspage=""; @endphp
-                              @endif
-                              @if ($role['full_access'] == 1)
-                                  @php $fullcmspage="checked"; @endphp
-                                  @else
-                                  @php $fullcmspage=""; @endphp
-                              @endif
-                          @endif
-                      @endforeach
+                            @foreach ($subadminRole as $role)
+                                @if ($role['module'] =="cms_pages")
+                                    @if ($role['view_access'] == 1)
+                                        @php $viewcmspage="checked"; @endphp
+                                        @else
+                                        @php $viewcmspage=""; @endphp
+                                    @endif
+                                    @if ($role['edit_access'] == 1)
+                                        @php $editcmspage="checked"; @endphp
+                                        @else
+                                        @php $editcmspage=""; @endphp
+                                    @endif
+                                    @if ($role['full_access'] == 1)
+                                        @php $fullcmspage="checked"; @endphp
+                                        @else
+                                        @php $fullcmspage=""; @endphp
+                                    @endif
+                                @endif
+                                @if ($role['module'] =="categories")
+                                    @if ($role['view_access'] == 1)
+                                        @php $viewcategories="checked"; @endphp
+                                        @else
+                                        @php $viewcategories=""; @endphp
+                                    @endif
+                                    @if ($role['edit_access'] == 1)
+                                        @php $editcategories="checked"; @endphp
+                                        @else
+                                        @php $editcategories=""; @endphp
+                                    @endif
+                                    @if ($role['full_access'] == 1)
+                                        @php $fullcategories="checked"; @endphp
+                                        @else
+                                        @php $fullcategories=""; @endphp
+                                    @endif
+                                @endif
+
+                            @endforeach
                       @endif
+
+                      {{-- @if (!empty($subadminRole))
+                            @foreach ($subadminRole as $role)
+                                @if ($role['module'] =="categories")
+                                    @if ($role['view_access'] == 1)
+                                        @php $viewcategories="checked"; @endphp
+                                        @else
+                                        @php $viewcategories=""; @endphp
+                                    @endif
+                                    @if ($role['edit_access'] == 1)
+                                        @php $editcategories="checked"; @endphp
+                                        @else
+                                        @php $editcategories=""; @endphp
+                                    @endif
+                                    @if ($role['full_access'] == 1)
+                                        @php $fullcategories="checked"; @endphp
+                                        @else
+                                        @php $fullcategories=""; @endphp
+                                    @endif
+                                @endif
+
+                            @endforeach
+                      @endif --}}
                       <div class="form-group col-md-6">
                      <label for="cms_pages">CMS Pages:&nbsp;&nbsp;&nbsp;</label>
                      <input type="checkbox" name="cms_pages[view]" value="1" @if (@isset($viewcmspage)) {{ $viewcmspage }} @endif>&nbsp;&nbsp;View Access&nbsp;&nbsp;&nbsp;
                       <input type="checkbox" name="cms_pages[edit]" value="1" @if (@isset($editcmspage)) {{ $editcmspage }} @endif>&nbsp;&nbsp;View/Edit Access&nbsp;&nbsp;&nbsp;
                       <input type="checkbox"  name="cms_pages[full]" value="1" @if (@isset($fullcmspage)) {{ $fullcmspage }} @endif>&nbsp;&nbsp;Full Access&nbsp;&nbsp;&nbsp;
+                      </div>
+
+                      <div class="form-group col-md-6">
+                     <label for="categories">Categories:&nbsp;&nbsp;&nbsp;</label>
+                     <input type="checkbox" name="categories[view]" value="1" @if (@isset($viewcategories)) {{ $viewcategories }} @endif>&nbsp;&nbsp;View Access&nbsp;&nbsp;&nbsp;
+                      <input type="checkbox" name="categories[edit]" value="1" @if (@isset($editcategories)) {{ $editcategories }} @endif>&nbsp;&nbsp;View/Edit Access&nbsp;&nbsp;&nbsp;
+                      <input type="checkbox"  name="categories[full]" value="1" @if (@isset($fullcategories)) {{ $fullcategories }} @endif>&nbsp;&nbsp;Full Access&nbsp;&nbsp;&nbsp;
                       </div>
                   </div>
 
