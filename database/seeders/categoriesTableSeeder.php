@@ -14,6 +14,7 @@ class categoriesTableSeeder extends Seeder
     public function run(): void
     {
         $CategoryRecords = [
+
             ['id' => 1, 'parent_id' =>0,'category_name' => 'Clothing','category_image' => '', 'category_discount' => 0,'description' => '','url' => '','meta_title' => '','meta_description' => '','meta_keywords' => '','status' => 1],
             ['id' => 2, 'parent_id' =>0,'category_name' => 'Electronics','category_image' => '', 'category_discount' => 0,'description' => '','url' => '','meta_title' => '','meta_description' => '','meta_keywords' => '','status' => 1],
             ['id' => 3, 'parent_id' =>0,'category_name' => 'Appliances','category_image' => '', 'category_discount' => 0,'description' => '','url' => '','meta_title' => '','meta_description' => '','meta_keywords' => '','status' => 1],
@@ -26,3 +27,5 @@ class categoriesTableSeeder extends Seeder
         Category::insert($CategoryRecords);
     }
 }
+
+
