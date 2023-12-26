@@ -148,3 +148,30 @@ $(document).on('click', '.confirmDelete', function () {
      });
 
 });
+
+      // Update product Status
+      $(document).on('click','.updateProductStatus', function(){
+        var status = $(this).children('i').attr('status');
+        var product_id = $(this).attr('product_id');
+       //alert(status);
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type:'post',
+            url:'/admin/update-product-status',
+            data:{status:status,product_id:product_id},
+            success:function(res){
+
+                if(res['status'] == 0){
+                    $('#product-'+product_id).html('<i class="fas fa-toggle-off" status="Inactive" style="color: gray"></i>');
+                }else if(res['status'] == 1){
+                    $('#product-'+product_id).html('<i class="fas fa-toggle-on" status="Active"></i>');
+                }
+
+            },
+            error:function(){
+                alert("Error");
+            }
+        });
+     });

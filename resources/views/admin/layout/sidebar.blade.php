@@ -230,7 +230,7 @@
                </a>
              </li>
              <li class="nav-item">
-                @if (Session::get('page') =='product')
+                @if (Session::get('page') =='products')
                     @php
                     $active='active';
                     @endphp
@@ -239,7 +239,7 @@
                         $active = "";
                     @endphp
                 @endif
-                <a href="{{ route('admin.product') }}" class="nav-link {{ $active }}">
+                <a href="{{ route('admin.products') }}" class="nav-link {{ $active }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Product</p>
                 </a>
