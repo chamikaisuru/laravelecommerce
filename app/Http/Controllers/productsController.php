@@ -34,7 +34,8 @@ class productsController extends Controller
     }
 
     public function addEditProduct(Request $request, $id = null) {
-        $getProducts = Product::getCategories();
+        $getProducts = Product::with('category');
+        dd($getProducts);
         Session::put('page','add-edit-product');
         if($id == ""){
             $title = "Add Product";
@@ -53,57 +54,94 @@ class productsController extends Controller
 
             if($id ==""){
                 $rules = [
+                    'category_id'=>'required',
                     'product_name'=>'required',
-                    'category_name' => 'required',
-                    'image' => 'image',
-                    'description' => 'required',
-                    'url' => 'required|unique:categories',
+                    'product_code' => 'required',
+                    'product_color' => 'required',
+                    'family_color' => 'required',
+                    'group_code' => 'required',
+                    'product_price' => 'required',
+                    // 'product_discount' => 'required',
+                    // 'product_weight' => 'required',
+                    // 'product_video' => 'required',
+                    'product_description' => 'required',
+                    // 'wash_care' => 'required',
+                    // 'search_keywords' => 'required',
+                    // 'meta_title' => 'required',
+                    // 'meta_description' => 'required',
+                    // 'meta_keywords' => 'required',
+                    // 'is_featured' => 'required',
                 ];
             } else {
                 $rules = [
-                    'parent_id'=>'required',
-                    'category_name' => 'required',
-                    'image' => 'image',
-                    'description' => 'required',
-                    'url' => 'required',
+                    'category_id'=>'required',
+                    'product_name'=>'required',
+                    'product_code' => 'required',
+                    'product_color' => 'required',
+                    'family_color' => 'required',
+                    'group_code' => 'required',
+                    'product_price' => 'required',
+                    // 'product_discount' => 'required',
+                    // 'product_weight' => 'required',
+                    // 'product_video' => 'required',
+                    'product_description' => 'required',
+                    // 'wash_care' => 'required',
+                    // 'search_keywords' => 'required',
+                    // 'meta_title' => 'required',
+                    // 'meta_description' => 'required',
+                    // 'meta_keywords' => 'required',
+                    // 'is_featured' => 'required',
                 ];
             }
 
 
             $customMessage = [
-                                'parent_id' => 'Category Level is required',
-                                'category_name.required' => 'category name is required',
-                                'image.image' => 'Valid image is required',
-                                'description.required' => 'category Description is required',
-                                'url.required' => 'category URL is required',
-                                'url.unique' => 'unique category URL is required',
+
+                    'category_id'=>'Category is required',
+                    'product_name.required'=>'product name is required',
+                    'product_code' => 'product code is required',
+                    'product_color' => 'product color is required',
+                    'family_color' => 'family color is required',
+                    'group_code' => 'group code is required',
+                    'product_price' => 'product price is required',
+                    // 'product_discount' => 'required',
+                    // 'product_weight' => 'required',
+                    // 'product_video' => 'required',
+                    'product_description' => 'product description is required',
+                    // 'wash_care' => 'required',
+                    // 'search_keywords' => 'required',
+                    // 'meta_title' => 'required',
+                    // 'meta_description' => 'required',
+                    // 'meta_keywords' => 'required',
+                    // 'is_featured' => 'required',
+
                             ];
 
             $this->validate($request,$rules,$customMessage);
 
-            if($request->hasFile('category_image')){
-                $imageTmp = $request->file('category_image');
-                if($imageTmp->isValid()){
+            if($request->hasFile('product_video')){
+                $videoTmp = $request->file('product_video');
+                if($videoTmp->isValid()){
                     // Get Image Extension
-                    $extension = $imageTmp->getClientOriginalExtension();
+                    $extension = $videoTmp->getClientOriginalExtension();
                     // Generate New Image name
-                    $imageName = rand(111,99999).'.'.$extension;
-                    $imagePath = 'frontend/img/category/'.$imageName;
+                    $videoName = rand(111,99999).'.'.$extension;
+                    $videoPath = 'frontend/img/category/'.$videoName;
                     // upload image to database
-                   Image::make($imageTmp)->save($imagePath);
+                   Image::make($videoTmp)->save($videoPath);
 
                 }
             }
-            elseif (!empty($data['current_img'])){
-                $imageName = $data['current_img'];
-                //dd($imageName);
-            }
+            // elseif (!empty($data['current_img'])){
+            //     $imageName = $data['current_img'];
+            //     //dd($imageName);
+            // }
         else {
-            $imageName = '';
+            $videoName = '';
         }
 
-        if(empty(isset($data['category_discount']))){
-            $data['category_discount']=0;
+        if(empty(isset($data['product_discount']))){
+            $data['product_discount']=0;
         }
 
                     $product->category_id = $data['category_id'];
@@ -118,11 +156,18 @@ class productsController extends Controller
                     $product->discount_type = $data['discount_type'];
                     $product->final_price = $data['final_price'];
                     $product->product_weight = $data['product_weight'];
-                    $product->product_video = $data['product_video'];
-                    $product->description = $data['description'];
+                    $product->product_video = $videoName;
+                    $product->description = $data['product_description'];
                     $product->wash_care = $data['wash_care'];
-                    $product->keywords = $data['keywords'];
-                    $product->filters = $data['filters'];
+                    $product->keywords = $data['search_keywords'];
+                    $product->fabric = $data['fabric'];
+                    $product->Pattern = $data['Pattern'];
+                    $product->sleeve_length = $data['sleeve_length'];
+                    $product->style = $data['style'];
+                    $product->fit = $data['fit'];
+                    $product->occasion = $data['occasion'];
+                    $product->neckline = $data['neckline'];
+                    $product->closure = $data['closure'];
                     $product->meta_title = $data['meta_title'];
                     $product->meta_description = $data['meta_description'];
                     $product->meta_keywords = $data['meta_keywords'];
